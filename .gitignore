@@ -2,6 +2,7 @@
 # Created by https://www.gitignore.io/api/git,webstorm,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=git,webstorm,visualstudio,visualstudiocode
 .DS_store
+/dist
 ### Git ###
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false
