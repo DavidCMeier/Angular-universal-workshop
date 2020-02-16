@@ -10,9 +10,8 @@ import {catchError} from 'rxjs/operators';
 })
 export class HeroResolver implements Resolve<Observable<any>> {
 
-  hero;
-
-  constructor(private heroesService: HeroesService) {}
+  constructor(private heroesService: HeroesService) {
+  }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.heroesService.getHero(route.params.id).pipe(catchError(() => of(null)));
