@@ -26,20 +26,24 @@ export class SeoService {
   constructor(private title: Title,
               private meta: Meta,
               @Inject(DOCUMENT) private doc,
-  ) {}
+  ) {
+  }
 
   configSEO(config: ConfigSeo) {
     this.title.setTitle(config.title);
     const pathname = new URL(this.doc.URL).pathname;
     this.meta.updateTag({name: 'description', content: config.description});
-    this.meta.updateTag({name: 'robots', content: (config.index + ',' + config.follow) || 'index,follow'});
+    this.meta.updateTag({name: 'robots', content: config.index && config.follow ? (config.index + ',' + config.follow) : 'index,follow'});
     this.meta.updateTag({name: 'keywords', content: config.keywords});
     this.meta.updateTag({name: 'og:type', content: 'website'});
     this.meta.updateTag({name: 'og:title', content: config.crawlerTitle || config.title});
     this.meta.updateTag({name: 'og:description', content: config.crawlerDescription || config.description});
     this.meta.updateTag({name: 'og:url', content: environment.baseUrl + pathname});
     this.meta.updateTag({name: 'og:site_name', content: 'Science Heroes'});
-    this.meta.updateTag({name: 'og:image', content: config.crawlerImage || '/assets/images/ada.jpg'});
+    this.meta.updateTag({
+      name: 'og:image',
+      content: `${environment.baseUrl}/${config.crawlerImage}` || `${environment.baseUrl}/assets/images/ada.jpg`
+    });
     this.meta.updateTag({name: 'twitter:card', content: 'summary'});
     this.meta.updateTag({name: 'twitter:url', content: environment.baseUrl + pathname});
     this.meta.updateTag({name: 'twitter:title', content: config.twitterTitle || config.title});

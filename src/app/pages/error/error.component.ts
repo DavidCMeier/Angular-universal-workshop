@@ -4,6 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {isPlatformServer} from '@angular/common';
 import {RESPONSE} from '@nguniversal/express-engine/tokens';
 import {Response} from 'express';
+import {ErrorStatus} from '../../helper/ErrorStatus';
 
 @Component({
   selector: 'app-error',
@@ -14,6 +15,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
 
   id: number;
   subscribe: Subscription[] = [];
+  ErrorSatus = ErrorStatus;
 
   constructor(private route: ActivatedRoute,
               @Inject(PLATFORM_ID) private platformId: Object,
@@ -21,10 +23,9 @@ export class ErrorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.subscribe.push(this.route.params.subscribe((params) => {
       const idNumber = Number(params.id);
-      this.id = !isNaN(idNumber) && idNumber > 100 && idNumber < 600 ? idNumber : 500;
+      this.id = this.checkError(idNumber);
       if (isPlatformServer(this.platformId)) {
         this.response.status(this.id);
       }
@@ -33,5 +34,13 @@ export class ErrorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscribe.map((sub) => sub.unsubscribe());
+  }
+
+  checkError(id: number): ErrorStatus {
+    if (isNaN(id)) {
+      return ErrorStatus.INTERNAL_SERVER_ERROR;
+    }
+    const val = ErrorStatus[id];
+    return val ? ErrorStatus[val] : ErrorStatus.INTERNAL_SERVER_ERROR;
   }
 }
